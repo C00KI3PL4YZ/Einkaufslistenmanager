@@ -19,6 +19,12 @@ def laden_liste(dateiname):
             liste.append(line.strip())
     return liste
 
+def load_list_database(dbconn):
+    cursor = dbconn.cursor()
+    cursor.execute("SELECT * FROM liste")
+    liste = cursor.fetchall()
+    return liste
+
 if __name__ == "__main__":
     main_liste = []
     dateiname = "file.csv"
