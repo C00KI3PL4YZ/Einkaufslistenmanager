@@ -20,8 +20,7 @@ def laden_liste(dateiname):
     liste = []
     with open(dateiname, "r") as file:
         for line in file:
-            liste.append(line.strip())
-    return liste
+            
 
 
 
