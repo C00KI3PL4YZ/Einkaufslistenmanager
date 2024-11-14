@@ -24,5 +24,10 @@ def laden_liste(dateiname):
     return liste
 
 
+if __name__ == "__main__":
+    main_liste = []
+    dateiname = input("Dateiname: ")
+    print("Ausgewählte Datei: " + dateiname)
+
 
 
