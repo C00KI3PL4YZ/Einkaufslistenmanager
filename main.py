@@ -1,5 +1,4 @@
 import psycopg2 
-import ISOLATION_LEVEL_AUTOCOMMIT
 
 def hinzufuegen_artikel(liste, artikel):
     liste.append(artikel)
@@ -34,18 +33,17 @@ def load_list_database(dbconn):
     return liste
 
 
-def create_database_if_not_exists(dbadresse, db_port, db_name, db_user, db_pass, db_table):
-    conn = start_connection(dbadresse, db_port, "postgres", db_user, db_pass)
-    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-    cursor = conn.cursor()
+# def create_database_if_not_exists(dbadresse, db_port, db_name, db_user, db_pass, db_table):
+#     conn = start_connection(dbadresse, db_port, "postgres", db_user, db_pass)
+#     cursor = conn.cursor()
 
-    cursor.execute("SELECT 1 FROM pg_catalog.pg_database WHERE datname = '$db_name'")
-    exists = cursor.fetchone()
-    if not exists:
-        cursor.execute('CREATE DATABASE $db_name')
-    conn.close()
-    exists2 = create_table_if_not_exists(dbadresse, db_port, db_name, db_user, db_pass, db_table)
-    return exists and exists2
+#     cursor.execute("SELECT 1 FROM pg_catalog.pg_database WHERE datname = '$db_name'")
+#     exists = cursor.fetchone()
+#     # if not exists:
+#         # cursor.execute('CREATE DATABASE $db_name')
+#     conn.close()
+#     exists2 = create_table_if_not_exists(dbadresse, db_port, db_name, db_user, db_pass, db_table)
+#     return exists and exists2
 
 def create_table_if_not_exists(dbadresse, db_port, db_name, db_user, db_pass, db_table):
     conn = start_connection(dbadresse, db_port, db_name, db_user, db_pass)
@@ -104,14 +102,15 @@ if __name__ == "__main__":
     db_user = "postgres"
     db_pass = "postgres"
     db_table = "liste"
-    exists = create_database_if_not_exists(db_adresse, db_port, db_name, db_user, db_pass, db_table)
-    if exists:
-        print("Datenbank wurde erstellt")
+    # exists = create_database_if_not_exists(db_adresse, db_port, db_name, db_user, db_pass, db_table)
+    # if exists:
+        # print("Datenbank wurde erstellt")
     dbconn = start_connection(db_adresse, db_port, db_name, db_user, db_pass)
     saved = True
-    print("Ausgewählte Datei: " + dateiname)
-    main_liste = load_list(dateiname)
+    # print("Ausgewählte Datei: " + dateiname)
+    # main_liste = load_list(dateiname)
     if checkdbconn == True:
+        print("Datenbankverbindung erfolgreich")
         exit()
     while True:
         print("1: Artikel hinzufügen")
