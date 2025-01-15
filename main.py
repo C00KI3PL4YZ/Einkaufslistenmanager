@@ -28,64 +28,41 @@ def speichern_liste(liste, dateiname):
         for artikel in liste:
             file.write(artikel + "\n")
 
-def laden_liste():
+def laden_liste(dateiname):
     liste = []
-    dateiname = ""
-    print("Ausgewählte Datei: " + dateiname)
     lsdir = list_directory()
-    if len(lsdir) == 1:
-        dateiname = lsdir[0]
-        main_liste = laden_liste(dateiname)
-    elif len(lsdir) > 1:
-        print("Mehrere Dateien gefunden:")
-        for idx, file in enumerate(lsdir):
-            print(f"{idx}: {file}")
-        auswahl = int(input("Auswahl: "))
-        dateiname = lsdir[auswahl]
-        main_liste = laden_liste(dateiname)
+    if dateiname != "" and dateiname != None:
+        with open(dateiname, "r") as file:
+            for line in file:
+                liste.append(line.strip()) 
+        return liste
     else:
-        print("Keine Dateien gefunden - Neue Datei wird erstellt")
-        dateiname = input("Dateiname oder Pfad angeben: ")
-        # check if file exists
-        if os.path.isfile(dateiname):
+        if len(lsdir) >= 1:
+            print("Dateien gefunden:")
+            for idx, file in enumerate(lsdir):
+                print(f"{idx}: {file}")
+            auswahl = int(input("Auswahl: "))
+            dateiname = lsdir[auswahl]
             main_liste = laden_liste(dateiname)
         else:
-            with open(dateiname, "w") as file:
-                pass
-            main_liste = []
+            print("Keine Dateien gefunden - Neue Datei wird erstellt")
+            dateiname = input("Dateiname oder Pfad angeben: ")
+            # check if file exists
+            if os.path.isfile(dateiname):
+                liste = laden_liste(dateiname)
+            else:
+                with open(dateiname, "w") as file:
+                    pass
+                liste = []
+                return [dateiname, liste]
 
     
 
 if __name__ == "__main__":
     main_liste = []
     dateiname = ""
-    print("Ausgewählte Datei: " + dateiname)
-    lsdir = list_directory()
-    if len(lsdir) == 1:
-        dateiname = lsdir[0]
-        main_liste = laden_liste(dateiname)
-    elif len(lsdir) > 1:
-        print("Mehrere Dateien gefunden:")
-        for idx, file in enumerate(lsdir):
-            print(f"{idx}: {file}")
-        auswahl = int(input("Auswahl: "))
-        dateiname = lsdir[auswahl]
-        main_liste = laden_liste(dateiname)
-    else:
-        print("Keine Dateien gefunden - Neue Datei wird erstellt")
-        dateiname = input("Dateiname oder Pfad angeben: ")
-        # check if file exists
-        if os.path.isfile(dateiname):
-            main_liste = laden_liste(dateiname)
-        else:
-            with open(dateiname, "w") as file:
-                pass
-            main_liste = []
 
-
-
-
-    # main_liste = laden_liste(dateiname)
+    dateiname
 
     while True:
         print("1: Artikel hinzufügen")
