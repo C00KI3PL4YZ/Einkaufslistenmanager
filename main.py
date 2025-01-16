@@ -1,6 +1,7 @@
 import os
 import pydoc
 
+
 def list_directory(path="./"):
     files = []
     for file in os.listdir(path):
@@ -10,9 +11,12 @@ def list_directory(path="./"):
             files.append(file)
     return files
 
+
 def hinzufuegen_artikel(liste):
     clear_screen()
-    artikel = input("Neuen Artikel zur Einkaufsliste hinzufügen (mehrere Artikel mit ',' oder ';' trennen): \n")
+    artikel = input(
+        "Neuen Artikel zur Einkaufsliste hinzufügen (mehrere Artikel mit ',' oder ';' trennen): \n"
+    )
     if artikel == "exit":
         return
     delimiter = "," if "," in artikel else ";" if ";" in artikel else None
@@ -30,6 +34,7 @@ def hinzufuegen_artikel(liste):
             clear_screen()
         else:
             liste.append(artikel)
+
 
 def entfernen_artikel(liste):
     print("Artikel zum entfernen: ")
@@ -50,27 +55,31 @@ def entfernen_artikel(liste):
         return
     liste.remove(artikel)
 
+
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
+
 
 def anzeigen_artikel(liste):
     clear_screen()
     pydoc.pager("\n".join(liste))
     # for artikel in liste:
-        # print(artikel)
+    # print(artikel)
     # print("\n\n")
+
 
 def speichern_liste(liste, dateiname):
     with open(dateiname, "w") as file:
         for artikel in liste:
             file.write(artikel + "\n")
 
+
 def laden_liste(dateiname):
     liste = []
     if dateiname != "" and dateiname != None:
         with open(dateiname, "r") as file:
             for line in file:
-                liste.append(line.strip()) 
+                liste.append(line.strip())
         return dateiname, liste
     else:
         lsdir = list_directory()
@@ -87,11 +96,14 @@ def laden_liste(dateiname):
                 dateiname, liste = datapath(dateiname)
                 return dateiname, liste
         else:
-            print("Keine Datei im aktuellen Verzeichnis gefunden - kompletten Pfad angeben oder Namen einer neuen Datei")
+            print(
+                "Keine Datei im aktuellen Verzeichnis gefunden - kompletten Pfad angeben oder Namen einer neuen Datei"
+            )
             dateiname = input("Dateiname oder Pfad angeben: ")
             # check if file exists
             dateiname, liste = datapath(dateiname)
             return dateiname, liste
+
 
 def datapath(dateiname):
 
@@ -103,8 +115,6 @@ def datapath(dateiname):
         liste = []
         return dateiname, liste
 
-
-    
 
 if __name__ == "__main__":
     main_liste = []
@@ -141,12 +151,29 @@ if __name__ == "__main__":
             if main_liste != laden_liste(dateiname):
                 print("Änderungen speichern?")
                 speichern = input("Y/n: ")
-                if speichern == "y" or speichern == "" or speichern == "Y":
+                if (
+                    speichern == ""
+                    or speichern == "y"
+                    or speichern == "Y"
+                    or speichern == "yes"
+                    or speichern == "Yes"
+                    or speichern == "YES"
+                    or speichern == "ja"
+                    or speichern == "Ja"
+                ):
                     speichern_liste(main_liste, dateiname)
                     break
-                elif speichern == "back" or speichern == "exit":
+                elif speichern == "back" or speichern == "exit" or speichern == "cancel":
                     continue
-                else:
+                elif (
+                    speichern == "n"
+                    or speichern == "N"
+                    or speichern == "no"
+                    or speichern == "No"
+                    or speichern == "NO"
+                    or speichern == "nein"
+                    or speichern == "Nein"
+                ):
                     print("Änderungen nicht gespeichert")
                     break
         else:
