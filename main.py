@@ -12,10 +12,24 @@ def list_directory(path="./"):
 
 def hinzufuegen_artikel(liste):
     clear_screen()
-    artikel = input("Neuen Artikel zur Einkaufsliste hinzufügen: ")
+    artikel = input("Neuen Artikel zur Einkaufsliste hinzufügen (mehrere Artikel mit ',' oder ';' trennen): \n")
     if artikel == "exit":
         return
-    liste.append(artikel)
+    delimiter = "," if "," in artikel else ";" if ";" in artikel else None
+    if delimiter:
+        artikel_list = [art.strip() for art in artikel.split(delimiter)]
+        for art in artikel_list:
+            if art not in liste:
+                liste.append(art)
+            else:
+                print(f"Artikel '{art}' bereits auf der Liste")
+    else:
+        if artikel in liste:
+            print("\nArtikel bereits auf der Liste\n")
+            wait = input("Weiter mit Enter")
+            clear_screen()
+        else:
+            liste.append(artikel)
 
 def entfernen_artikel(liste):
     print("Artikel zum entfernen: ")
@@ -67,10 +81,11 @@ def laden_liste(dateiname):
             auswahl = input("Dateipfad angeben oder Nummer auswählen: ")
             if auswahl.isdigit():
                 dateiname = lsdir[int(auswahl)]
+                return dateiname, liste
             else:
                 dateiname = auswahl
-            dateiname, liste =  laden_liste(dateiname)
-            return dateiname, liste
+                dateiname, liste = datapath(dateiname)
+                return dateiname, liste
         else:
             print("Keine Datei im aktuellen Verzeichnis gefunden - kompletten Pfad angeben oder Namen einer neuen Datei")
             dateiname = input("Dateiname oder Pfad angeben: ")
@@ -118,16 +133,21 @@ if __name__ == "__main__":
         elif auswahl == "3":
             speichern_liste(main_liste, dateiname)
         elif auswahl == "4":
-            main_liste = laden_liste(dateiname)
+            dateiname = ""
+            dateiname, main_liste = laden_liste(dateiname)
+            clear_screen()
+            print("Ausgewählte Datei: " + dateiname + "\n")
         elif auswahl == "5":
-            print(main_liste)
             if main_liste != laden_liste(dateiname):
                 print("Änderungen speichern?")
                 speichern = input("Y/n: ")
                 if speichern == "y" or speichern == "" or speichern == "Y":
                     speichern_liste(main_liste, dateiname)
+                    break
+                elif speichern == "back" or speichern == "exit":
+                    continue
                 else:
                     print("Änderungen nicht gespeichert")
-            break
+                    break
         else:
             print("Ungültige Eingabe")
