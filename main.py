@@ -1,16 +1,17 @@
 import os
 import pydoc
+import time
 
 
 def list_directory(path="./"):
     files = []
-    for file in os.listdir(path):
-        if file.startswith("."):
-            continue
-        elif file.endswith(".csv"):
-            files.append(file)
+    for root, dirs, filenames in os.walk(path):
+        for file in filenames:
+            if file.startswith("."):
+                continue
+            elif file.endswith(".csv"):
+                files.append(os.path.join(root, file))
     return files
-
 
 def hinzufuegen_artikel(liste):
     clear_screen()
@@ -90,16 +91,16 @@ def laden_liste(dateiname):
             auswahl = input("Dateipfad angeben oder Nummer auswählen: ")
             if auswahl.isdigit():
                 dateiname = lsdir[int(auswahl)]
-                return dateiname, liste
+                dateiname, liste = datapath(dateiname)
             else:
                 dateiname = auswahl
                 dateiname, liste = datapath(dateiname)
-                return dateiname, liste
+            return dateiname, liste
         else:
             print(
-                "Keine Datei im aktuellen Verzeichnis gefunden - kompletten Pfad angeben oder Namen einer neuen Datei"
+                "Keine Datei im aktuellen Verzeichnis gefunden"
             )
-            dateiname = input("Dateiname oder Pfad angeben: ")
+            dateiname = input("Pfad oder Namen einer neuen Datei angeben: ")
             # check if file exists
             dateiname, liste = datapath(dateiname)
             return dateiname, liste
@@ -108,12 +109,13 @@ def laden_liste(dateiname):
 def datapath(dateiname):
 
     if os.path.isfile(dateiname):
-        liste = laden_liste(dateiname)
+        dateiname, liste = laden_liste(dateiname)
     else:
+        print(dateiname)
         with open(dateiname, "w") as file:
             pass
         liste = []
-        return dateiname, liste
+    return dateiname, liste
 
 
 if __name__ == "__main__":
@@ -124,6 +126,8 @@ if __name__ == "__main__":
     dateiname, main_liste = laden_liste(dateiname)
     print("Dateiname: " + dateiname)
     print(main_liste)
+    time.sleep(2)
+
 
     clear_screen()
     while True:
@@ -148,7 +152,8 @@ if __name__ == "__main__":
             clear_screen()
             print("Ausgewählte Datei: " + dateiname + "\n")
         elif auswahl == "5":
-            if main_liste != laden_liste(dateiname):
+            print("")
+            if main_liste != laden_liste(dateiname)[1]:
                 print("Änderungen speichern?")
                 speichern = input("Y/n: ")
                 if (
@@ -176,5 +181,7 @@ if __name__ == "__main__":
                 ):
                     print("Änderungen nicht gespeichert")
                     break
+            else:
+                break   
         else:
             print("Ungültige Eingabe")
