@@ -101,7 +101,6 @@ def laden_liste(dateiname):
                 "Keine Datei im aktuellen Verzeichnis gefunden"
             )
             dateiname = input("Pfad oder Namen einer neuen Datei angeben: ")
-            # check if file exists
             dateiname, liste = datapath(dateiname)
             return dateiname, liste
 
@@ -126,7 +125,7 @@ if __name__ == "__main__":
     dateiname, main_liste = laden_liste(dateiname)
     print("Dateiname: " + dateiname)
     print(main_liste)
-    time.sleep(2)
+    # time.sleep(1)
 
 
     clear_screen()
